@@ -1,11 +1,11 @@
 # Reproducible Research: Peer Assessment 1
-## Basic Setting
+## Reading a few useful library
 
 ```
 ## Loading required package: ggplot2
 ```
-## Loading and preprocessing the data
-
+## Loading file
+### In this part, We download the file from websit
 
 ```r
 setInternet2(use = TRUE)
@@ -21,7 +21,15 @@ download.file(dataURL, temp_file)
 
 ```r
 unzip(temp_file,"activity.csv")
-#setwd("E:/DataScience/Reproducible Research Project 1/")
+print(sprintf("File is downloaded and unzipped for furthur use"))
+```
+
+```
+## [1] "File is downloaded and unzipped for furthur use"
+```
+### Now, we read the data and eliminate the "Not Available" data
+
+```r
 data <- read.csv("activity.csv", header=T)
 data_narm <- na.omit(data)
 head(data_narm)
@@ -37,6 +45,7 @@ head(data_narm)
 ## 294     0 2012-10-02       25
 ```
 ## What is mean total number of steps taken per day?
+* Sum up steps based on dates
 
 ```r
 Total_by_date <- aggregate(data_narm$steps, list(Date = data_narm$date), 
@@ -52,8 +61,9 @@ labs(title = "Histogram of Total Number of Steps Taken Each Day without NA",
 x = "Date", y = "Total number of steps")
 ```
 
-![](PA1_template_files/figure-html/unnamed-chunk-3-1.png) 
+![](PA1_template_files/figure-html/unnamed-chunk-4-1.png) 
 
+## The mean total step is
 
 ```r
 mean(Total_by_date$x)
@@ -62,6 +72,7 @@ mean(Total_by_date$x)
 ```
 ## [1] 10766.19
 ```
+## The median of total step is
 
 ```r
 median(Total_by_date$x)
@@ -85,7 +96,7 @@ labs(title = "Daily Average Activity Pattern",
 x = " Daily 5-minute interval (x-axis)", y = "Average number of steps")
 ```
 
-![](PA1_template_files/figure-html/unnamed-chunk-6-1.png) 
+![](PA1_template_files/figure-html/unnamed-chunk-9-1.png) 
 
 
 ```r
@@ -98,19 +109,22 @@ print(sprintf("Daily 5-min time Interval with maximum average steps taken : %i "
 ## [1] "Daily 5-min time Interval with maximum average steps taken : 835 "
 ```
 ## Imputing missing values
-
+### Let us see how many lines we are missing
 
 ```r
 t_row <- nrow(data)
 t_row_narm <- nrow(data_narm)
 t_row_na <- t_row-t_row_narm
-print(sprintf("We have %i rows of NA data", t_row_na))
+print(sprintf("We have %i rows of Not-Available Data", t_row_na))
 ```
 
 ```
-## [1] "We have 2304 rows of NA data"
+## [1] "We have 2304 rows of Not-Available Data"
 ```
-
+### Now, How do we do now?
+### * We could use median number here
+### * Or, we could use mean number here
+### In order to have more general analysis, we use MEAN steps here to fill up the Not-Available data.
 
 ```r
 data_to_fill <- data
@@ -145,9 +159,11 @@ labs(title = "Histogram of Total Number of Steps Taken Each Day with All Data",
 x = "Date", y = "Total number of steps")
 ```
 
-![](PA1_template_files/figure-html/unnamed-chunk-10-1.png) 
+![](PA1_template_files/figure-html/unnamed-chunk-13-1.png) 
 
 ## Are there differences in activity patterns between weekdays and weekends?
+### 1. We set Mon-Fri as "Weekday"
+### 2. we set Sat-Sun as "Weekend"
 
 ```r
 new <- data_to_fill
@@ -157,6 +173,8 @@ new$weekdays[weekdays(new$date) %in% c("Saturday")] <- "weekend"
 new$weekdays[weekdays(new$date) %in% c("Sunday")] <- "weekend"
 new$week <- as.factor(new$weekdays)
 ```
+
+### Use the filled-up data to process the analysis
 
 ```r
 new_ave <- aggregate(new$steps, list(interval = as.numeric(new$interval),
@@ -184,7 +202,7 @@ labs(title = "Daily Average Activity Pattern (Weekdays)",
 x = " Daily 5-minute interval (x-axis)", y = "Average number of steps")
 ```
 
-![](PA1_template_files/figure-html/unnamed-chunk-13-1.png) 
+![](PA1_template_files/figure-html/unnamed-chunk-16-1.png) 
 
 
 ```r
@@ -194,4 +212,4 @@ labs(title = "Daily Average Activity Pattern (weekends)",
 x = " Daily 5-minute interval (x-axis)", y = "Average number of steps")
 ```
 
-![](PA1_template_files/figure-html/unnamed-chunk-14-1.png) 
+![](PA1_template_files/figure-html/unnamed-chunk-17-1.png) 
