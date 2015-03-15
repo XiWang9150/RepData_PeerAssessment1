@@ -8,12 +8,21 @@
 
 
 ```r
-#temp_file <- tempfile()
-#dataURL <- "https://d396qusza40orc.cloudfront.net/repdata%2Fdata%2Factivity.zip"
-#download.file(dataURL, temp_file)
-#unzip(temp_file,"activity.csv")
-setwd("E:/DataScience/Reproducible Research Project 1/")
-data <- read.csv("./activity.csv", header=T)
+setInternet2(use = TRUE)
+temp_file <- tempfile()
+dataURL <- "https://d396qusza40orc.cloudfront.net/repdata%2Fdata%2Factivity.zip"
+download.file(dataURL, temp_file)
+```
+
+```
+## Warning in download.file(dataURL, temp_file): downloaded length 53559 !=
+## reported length 53559
+```
+
+```r
+unzip(temp_file,"activity.csv")
+#setwd("E:/DataScience/Reproducible Research Project 1/")
+data <- read.csv("activity.csv", header=T)
 data_narm <- na.omit(data)
 head(data_narm)
 ```

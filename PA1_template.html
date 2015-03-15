@@ -70,12 +70,15 @@ img {
 </div>
 <div id="loading-and-preprocessing-the-data" class="section level2">
 <h2>Loading and preprocessing the data</h2>
-<pre class="r"><code>#temp_file &lt;- tempfile()
-#dataURL &lt;- &quot;https://d396qusza40orc.cloudfront.net/repdata%2Fdata%2Factivity.zip&quot;
-#download.file(dataURL, temp_file)
-#unzip(temp_file,&quot;activity.csv&quot;)
-setwd(&quot;E:/DataScience/Reproducible Research Project 1/&quot;)
-data &lt;- read.csv(&quot;./activity.csv&quot;, header=T)
+<pre class="r"><code>setInternet2(use = TRUE)
+temp_file &lt;- tempfile()
+dataURL &lt;- &quot;https://d396qusza40orc.cloudfront.net/repdata%2Fdata%2Factivity.zip&quot;
+download.file(dataURL, temp_file)</code></pre>
+<pre><code>## Warning in download.file(dataURL, temp_file): downloaded length 53559 !=
+## reported length 53559</code></pre>
+<pre class="r"><code>unzip(temp_file,&quot;activity.csv&quot;)
+#setwd(&quot;E:/DataScience/Reproducible Research Project 1/&quot;)
+data &lt;- read.csv(&quot;activity.csv&quot;, header=T)
 data_narm &lt;- na.omit(data)
 head(data_narm)</code></pre>
 <pre><code>##     steps       date interval
